@@ -7,11 +7,14 @@ rankall <- function(outcome, num = "best") {
   states<-unique(c(as.character(data$State)))
   states<-sort(states,decreasing = FALSE)
   outcomes<-c("heart attack", "heart failure", "pneumonia")
+  
+  
   colnum<-NULL
-  df= NULL
-  hospital <- NULL
-  state <- NULL
-  ## Check that state and outcome are valid
+  df= NULL #dataframe to hold result
+  hospital <- NULL #vector to hold hospital name
+  
+
+  ## Check that outcome is valid
    if(!outcome%in%outcomes)
   {
     stop("invalid outcome")
