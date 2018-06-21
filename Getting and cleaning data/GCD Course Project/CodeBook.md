@@ -32,7 +32,7 @@ In this section, I
 ##*Data Processing*
 
 ###Step 1. Extract Mean and Standard Deviation Measures
-To extract the mean and standard deviation measures, I used the grep() function to get IDs of feautures that have mean() and std() in their text and select subsets from X_test and X_train sets into ms_test and ms_train dataframes.
+To extract the mean and standard deviation measures, I used the grep() function to get IDs of features that have mean() and std() in their text and select subsets from X_test and X_train sets into ms_test and ms_train dataframes.
 
         - *ms_test* :subset of x_test with mean() and std() measures
         - *ms_train* :subset of x_train with mean() and std() measures
@@ -43,7 +43,7 @@ To extract the mean and standard deviation measures, I used the grep() function 
         ms_train<-select(X_train,grep("mean\\W|std\\W",as.character(features$V2)))
 ```
         
-###Step 2. Bind Colum labels
+###Step 2. Bind Column labels
 To create a more complete data set I bind the test and train subsets with their corresponting subject, activity and lables to form to form the test and train dfs
 
         - *test* : column bind of subject_test, Y_test and ms_test
@@ -111,10 +111,85 @@ To create independent tidy data set with the average of each variable for each a
           summarise_all(mean)
 ```
 
-##*Outputing result*
+##*Outputing Result*
 Output the tidy data set to a space separated file :'tidydata.txt'
 
 ```r
 #write tidy data set to 
 write.table(mean_data, file = "tidydata.txt", sep = " ", row.names = FALSE)
+```
+#Tidy data Description
+Tidy data is a data set with 180 observations of 68 variables. the variables are a follows
+
+
+```
+## [1] " Variable  1 :  activity  - recorded activity with levels ( WALKING, WALKING_UPSTAIRS , WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING)"
+## [1] " Variable  1 :  activity"
+## [1] " Variable  2 :  subject - participating subjects with levels 1:30\n                                         Variable 3-68 are numeric variables with titles as seen below"
+## [1] " Variable  3 :  tbodyacc-mean-x"
+## [1] " Variable  4 :  tbodyacc-mean-y"
+## [1] " Variable  5 :  tbodyacc-mean-z"
+## [1] " Variable  6 :  tbodyacc-std-x"
+## [1] " Variable  7 :  tbodyacc-std-y"
+## [1] " Variable  8 :  tbodyacc-std-z"
+## [1] " Variable  9 :  tgravityacc-mean-x"
+## [1] " Variable  10 :  tgravityacc-mean-y"
+## [1] " Variable  11 :  tgravityacc-mean-z"
+## [1] " Variable  12 :  tgravityacc-std-x"
+## [1] " Variable  13 :  tgravityacc-std-y"
+## [1] " Variable  14 :  tgravityacc-std-z"
+## [1] " Variable  15 :  tbodyaccjerk-mean-x"
+## [1] " Variable  16 :  tbodyaccjerk-mean-y"
+## [1] " Variable  17 :  tbodyaccjerk-mean-z"
+## [1] " Variable  18 :  tbodyaccjerk-std-x"
+## [1] " Variable  19 :  tbodyaccjerk-std-y"
+## [1] " Variable  20 :  tbodyaccjerk-std-z"
+## [1] " Variable  21 :  tbodygyro-mean-x"
+## [1] " Variable  22 :  tbodygyro-mean-y"
+## [1] " Variable  23 :  tbodygyro-mean-z"
+## [1] " Variable  24 :  tbodygyro-std-x"
+## [1] " Variable  25 :  tbodygyro-std-y"
+## [1] " Variable  26 :  tbodygyro-std-z"
+## [1] " Variable  27 :  tbodygyrojerk-mean-x"
+## [1] " Variable  28 :  tbodygyrojerk-mean-y"
+## [1] " Variable  29 :  tbodygyrojerk-mean-z"
+## [1] " Variable  30 :  tbodygyrojerk-std-x"
+## [1] " Variable  31 :  tbodygyrojerk-std-y"
+## [1] " Variable  32 :  tbodygyrojerk-std-z"
+## [1] " Variable  33 :  tbodyaccmag-mean"
+## [1] " Variable  34 :  tbodyaccmag-std"
+## [1] " Variable  35 :  tgravityaccmag-mean"
+## [1] " Variable  36 :  tgravityaccmag-std"
+## [1] " Variable  37 :  tbodyaccjerkmag-mean"
+## [1] " Variable  38 :  tbodyaccjerkmag-std"
+## [1] " Variable  39 :  tbodygyromag-mean"
+## [1] " Variable  40 :  tbodygyromag-std"
+## [1] " Variable  41 :  tbodygyrojerkmag-mean"
+## [1] " Variable  42 :  tbodygyrojerkmag-std"
+## [1] " Variable  43 :  fbodyacc-mean-x"
+## [1] " Variable  44 :  fbodyacc-mean-y"
+## [1] " Variable  45 :  fbodyacc-mean-z"
+## [1] " Variable  46 :  fbodyacc-std-x"
+## [1] " Variable  47 :  fbodyacc-std-y"
+## [1] " Variable  48 :  fbodyacc-std-z"
+## [1] " Variable  49 :  fbodyaccjerk-mean-x"
+## [1] " Variable  50 :  fbodyaccjerk-mean-y"
+## [1] " Variable  51 :  fbodyaccjerk-mean-z"
+## [1] " Variable  52 :  fbodyaccjerk-std-x"
+## [1] " Variable  53 :  fbodyaccjerk-std-y"
+## [1] " Variable  54 :  fbodyaccjerk-std-z"
+## [1] " Variable  55 :  fbodygyro-mean-x"
+## [1] " Variable  56 :  fbodygyro-mean-y"
+## [1] " Variable  57 :  fbodygyro-mean-z"
+## [1] " Variable  58 :  fbodygyro-std-x"
+## [1] " Variable  59 :  fbodygyro-std-y"
+## [1] " Variable  60 :  fbodygyro-std-z"
+## [1] " Variable  61 :  fbodyaccmag-mean"
+## [1] " Variable  62 :  fbodyaccmag-std"
+## [1] " Variable  63 :  fbodybodyaccjerkmag-mean"
+## [1] " Variable  64 :  fbodybodyaccjerkmag-std"
+## [1] " Variable  65 :  fbodybodygyromag-mean"
+## [1] " Variable  66 :  fbodybodygyromag-std"
+## [1] " Variable  67 :  fbodybodygyrojerkmag-mean"
+## [1] " Variable  68 :  fbodybodygyrojerkmag-std"
 ```
