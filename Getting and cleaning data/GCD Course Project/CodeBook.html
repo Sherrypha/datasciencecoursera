@@ -132,14 +132,15 @@ $(document).ready(function () {
 <li><a href="#getting-data"><em>Getting data</em></a></li>
 <li><a href="#data-processing"><em>Data Processing</em></a><ul>
 <li><a href="#step-1.-extract-mean-and-standard-deviation-measures">Step 1. Extract Mean and Standard Deviation Measures</a></li>
-<li><a href="#step-2.-bind-colum-labels">Step 2. Bind Colum labels</a></li>
+<li><a href="#step-2.-bind-column-labels">Step 2. Bind Column labels</a></li>
 <li><a href="#step-3.-merge-the-train-and-test-data-sets">Step 3. Merge the train and test data sets</a></li>
 <li><a href="#step-4.-to-set-the-column-names-i">Step 4. To set the column names, I</a></li>
 <li><a href="#step-5.-set-activity-names">Step 5. Set Activity Names</a></li>
 <li><a href="#step-6-create-tidy-data-set-with-average-values">Step 6 Create Tidy Data Set with average Values</a></li>
 </ul></li>
-<li><a href="#outputing-result"><em>Outputing result</em></a></li>
+<li><a href="#outputing-result"><em>Outputing Result</em></a></li>
 </ul></li>
+<li><a href="#tidy-data-description">Tidy data Description</a></li>
 </ul>
 </div>
 
@@ -166,15 +167,15 @@ $(document).ready(function () {
 <h2><em>Data Processing</em></h2>
 <div id="step-1.-extract-mean-and-standard-deviation-measures" class="section level3">
 <h3>Step 1. Extract Mean and Standard Deviation Measures</h3>
-<p>To extract the mean and standard deviation measures, I used the grep() function to get IDs of feautures that have mean() and std() in their text and select subsets from X_test and X_train sets into ms_test and ms_train dataframes.</p>
+<p>To extract the mean and standard deviation measures, I used the grep() function to get IDs of features that have mean() and std() in their text and select subsets from X_test and X_train sets into ms_test and ms_train dataframes.</p>
 <pre><code>    - *ms_test* :subset of x_test with mean() and std() measures
     - *ms_train* :subset of x_train with mean() and std() measures</code></pre>
 <pre class="r"><code># extract mean n std measures for tran and test sets
         ms_test&lt;-select(X_test,grep(&quot;mean\\W|std\\W&quot;,as.character(features$V2)))
         ms_train&lt;-select(X_train,grep(&quot;mean\\W|std\\W&quot;,as.character(features$V2)))</code></pre>
 </div>
-<div id="step-2.-bind-colum-labels" class="section level3">
-<h3>Step 2. Bind Colum labels</h3>
+<div id="step-2.-bind-column-labels" class="section level3">
+<h3>Step 2. Bind Column labels</h3>
 <p>To create a more complete data set I bind the test and train subsets with their corresponting subject, activity and lables to form to form the test and train dfs</p>
 <pre><code>    - *test* : column bind of subject_test, Y_test and ms_test
     - *train* : column bind of subject_train, Y_train and ms_train</code></pre>
@@ -226,11 +227,84 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="outputing-result" class="section level2">
-<h2><em>Outputing result</em></h2>
+<h2><em>Outputing Result</em></h2>
 <p>Output the tidy data set to a space separated file :‘tidydata.txt’</p>
 <pre class="r"><code>#write tidy data set to 
 write.table(mean_data, file = &quot;tidydata.txt&quot;, sep = &quot; &quot;, row.names = FALSE)</code></pre>
 </div>
+</div>
+<div id="tidy-data-description" class="section level1">
+<h1>Tidy data Description</h1>
+<p>Tidy data is a data set with 180 observations of 68 variables. the variables are a follows</p>
+<pre><code>## [1] &quot; Variable  1 :  activity  - recorded activity with levels ( WALKING, WALKING_UPSTAIRS , WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING)&quot;
+## [1] &quot; Variable  1 :  activity&quot;
+## [1] &quot; Variable  2 :  subject - participating subjects with levels 1:30\n                                         Variable 3-68 are numeric variables with titles as seen below&quot;
+## [1] &quot; Variable  3 :  tbodyacc-mean-x&quot;
+## [1] &quot; Variable  4 :  tbodyacc-mean-y&quot;
+## [1] &quot; Variable  5 :  tbodyacc-mean-z&quot;
+## [1] &quot; Variable  6 :  tbodyacc-std-x&quot;
+## [1] &quot; Variable  7 :  tbodyacc-std-y&quot;
+## [1] &quot; Variable  8 :  tbodyacc-std-z&quot;
+## [1] &quot; Variable  9 :  tgravityacc-mean-x&quot;
+## [1] &quot; Variable  10 :  tgravityacc-mean-y&quot;
+## [1] &quot; Variable  11 :  tgravityacc-mean-z&quot;
+## [1] &quot; Variable  12 :  tgravityacc-std-x&quot;
+## [1] &quot; Variable  13 :  tgravityacc-std-y&quot;
+## [1] &quot; Variable  14 :  tgravityacc-std-z&quot;
+## [1] &quot; Variable  15 :  tbodyaccjerk-mean-x&quot;
+## [1] &quot; Variable  16 :  tbodyaccjerk-mean-y&quot;
+## [1] &quot; Variable  17 :  tbodyaccjerk-mean-z&quot;
+## [1] &quot; Variable  18 :  tbodyaccjerk-std-x&quot;
+## [1] &quot; Variable  19 :  tbodyaccjerk-std-y&quot;
+## [1] &quot; Variable  20 :  tbodyaccjerk-std-z&quot;
+## [1] &quot; Variable  21 :  tbodygyro-mean-x&quot;
+## [1] &quot; Variable  22 :  tbodygyro-mean-y&quot;
+## [1] &quot; Variable  23 :  tbodygyro-mean-z&quot;
+## [1] &quot; Variable  24 :  tbodygyro-std-x&quot;
+## [1] &quot; Variable  25 :  tbodygyro-std-y&quot;
+## [1] &quot; Variable  26 :  tbodygyro-std-z&quot;
+## [1] &quot; Variable  27 :  tbodygyrojerk-mean-x&quot;
+## [1] &quot; Variable  28 :  tbodygyrojerk-mean-y&quot;
+## [1] &quot; Variable  29 :  tbodygyrojerk-mean-z&quot;
+## [1] &quot; Variable  30 :  tbodygyrojerk-std-x&quot;
+## [1] &quot; Variable  31 :  tbodygyrojerk-std-y&quot;
+## [1] &quot; Variable  32 :  tbodygyrojerk-std-z&quot;
+## [1] &quot; Variable  33 :  tbodyaccmag-mean&quot;
+## [1] &quot; Variable  34 :  tbodyaccmag-std&quot;
+## [1] &quot; Variable  35 :  tgravityaccmag-mean&quot;
+## [1] &quot; Variable  36 :  tgravityaccmag-std&quot;
+## [1] &quot; Variable  37 :  tbodyaccjerkmag-mean&quot;
+## [1] &quot; Variable  38 :  tbodyaccjerkmag-std&quot;
+## [1] &quot; Variable  39 :  tbodygyromag-mean&quot;
+## [1] &quot; Variable  40 :  tbodygyromag-std&quot;
+## [1] &quot; Variable  41 :  tbodygyrojerkmag-mean&quot;
+## [1] &quot; Variable  42 :  tbodygyrojerkmag-std&quot;
+## [1] &quot; Variable  43 :  fbodyacc-mean-x&quot;
+## [1] &quot; Variable  44 :  fbodyacc-mean-y&quot;
+## [1] &quot; Variable  45 :  fbodyacc-mean-z&quot;
+## [1] &quot; Variable  46 :  fbodyacc-std-x&quot;
+## [1] &quot; Variable  47 :  fbodyacc-std-y&quot;
+## [1] &quot; Variable  48 :  fbodyacc-std-z&quot;
+## [1] &quot; Variable  49 :  fbodyaccjerk-mean-x&quot;
+## [1] &quot; Variable  50 :  fbodyaccjerk-mean-y&quot;
+## [1] &quot; Variable  51 :  fbodyaccjerk-mean-z&quot;
+## [1] &quot; Variable  52 :  fbodyaccjerk-std-x&quot;
+## [1] &quot; Variable  53 :  fbodyaccjerk-std-y&quot;
+## [1] &quot; Variable  54 :  fbodyaccjerk-std-z&quot;
+## [1] &quot; Variable  55 :  fbodygyro-mean-x&quot;
+## [1] &quot; Variable  56 :  fbodygyro-mean-y&quot;
+## [1] &quot; Variable  57 :  fbodygyro-mean-z&quot;
+## [1] &quot; Variable  58 :  fbodygyro-std-x&quot;
+## [1] &quot; Variable  59 :  fbodygyro-std-y&quot;
+## [1] &quot; Variable  60 :  fbodygyro-std-z&quot;
+## [1] &quot; Variable  61 :  fbodyaccmag-mean&quot;
+## [1] &quot; Variable  62 :  fbodyaccmag-std&quot;
+## [1] &quot; Variable  63 :  fbodybodyaccjerkmag-mean&quot;
+## [1] &quot; Variable  64 :  fbodybodyaccjerkmag-std&quot;
+## [1] &quot; Variable  65 :  fbodybodygyromag-mean&quot;
+## [1] &quot; Variable  66 :  fbodybodygyromag-std&quot;
+## [1] &quot; Variable  67 :  fbodybodygyrojerkmag-mean&quot;
+## [1] &quot; Variable  68 :  fbodybodygyrojerkmag-std&quot;</code></pre>
 </div>
 
 

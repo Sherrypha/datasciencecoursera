@@ -31,7 +31,7 @@ In this section, I
         - *subject_train*: Each row identifies the subject who performed the activity for each window sample. Its range is from 1 to 30. 
         - *subject_train*: Each row identifies the subject who performed the activity for each window sample. Its range is from 1 to 30. 
 
-```{r getdata, echo=FALSE}
+```{r getdata, echo=FALSE, cache=TRUE}
 #download project data set
 if(!file.exists("./data")){dir.create("./data");download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip", destfile="./data/UCI HAR Dataset.zip" )}
 
@@ -133,4 +133,18 @@ Output the tidy data set to a space separated file :'tidydata.txt'
 ```{r}
 #write tidy data set to 
 write.table(mean_data, file = "tidydata.txt", sep = " ", row.names = FALSE)
+```
+#Tidy data Description
+Tidy data is a data set with 180 observations of 68 variables. the variables are a follows
+
+```{r showvariables, echo=FALSE }
+        for (i in 1:length(variables))
+        {
+                if(i==1){print( paste( " Variable ", i ,": ",c(colnames(mean_data[i])),
+                                       " - recorded activity with levels (",               "WALKING, WALKING_UPSTAIRS , WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING)")) }
+                ifelse(i==2,print( paste( " Variable ", i ,": ",c(colnames(mean_data[i])),
+                                       "- participating subjects with levels 1:30
+                                         Variable 3-68 are numeric variables with titles as seen below")),print( paste( " Variable ", i ,": ",c(colnames(mean_data[i])))))
+        }
+
 ```
