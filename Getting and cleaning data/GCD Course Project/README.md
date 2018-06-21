@@ -10,10 +10,11 @@ output:
 This file explains the content of the run_analysis.R file. 
 
 #Introduction
-
-The Source data for this file is A 561-feature vector with time and frequency domain variables, Its activity label, An identifier of the subject who carried out the experiment with files that include the following:
-The dataset includes the following files:
 =============================================================================================
+
+The Source data for this analysis is A 561-feature vector with time and frequency domain variables, Its activity label and An identifier of the subject who carried out the experiment 
+The dataset includes the following files:
+
 
 - 'README.txt'
 
@@ -42,8 +43,7 @@ The run_analysis.r file contains function run_analysis that cleans up the UCI HA
          - *Section 3: Outputing result*
 
 #Analysis
-
-===============================================================================================
+==============================================================================================
 
 ##Section 1: Getting data
 The code in this section
@@ -52,7 +52,7 @@ The code in this section
         - unzips the data
         - create tbl_df from the data set files. I chose to use tbl_df to make it easy to process data with the dplyr package,
         
-=============================================================================================
+
 
 ##Section 2: Data Processing
 
@@ -89,12 +89,11 @@ The code in this section
         - group data by activity, subject
         - summarise the data using summarise_all() calling the mean function
 
-========================================================================================
+
 
 ##Section 3:Outputing Result
 Outputs the tidy data set to a space separated file :'tidydata.txt'
 
-========================================================================================
 
 To run this file, save and source the file and run the run_anaysis()  function
 
