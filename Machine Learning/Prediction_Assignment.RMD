@@ -1,0 +1,209 @@
+---
+title: "Prediction Assignment Writeup"
+author: "Sherifat A-Shitu"
+date: "27 November 2018"
+output:
+  html_document:
+    keep_md: yes
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(UsingR)
+library(reshape)
+library(manipulate)
+library(dplyr)
+library(caret)
+library(ggplot2)
+library(gridExtra)
+library(GGally)
+library(rpart)
+library(rpart.plot)
+library(RColorBrewer)
+library(rattle)
+library(scales)
+library(ggcorrplot)
+```
+
+#Executive Summary
+
+The goal of this project, is to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants that were asked to perform barbell lifts correctly and incorrectly in 5 different ways to predict the manner in which they did the exercise(This is the "classe" variable in the training set.)
+
+##Background
+
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement - a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. See Appendix 4.1 for data source details
+
+##Summary of findings
+
+To predict the __classe__ variable, we tried predicting with randomforests. RandomForests method 
+
+1. Bootstrap samples
+2. At each split, bootstrap variables
+3. Grow multiple trees and vote
+
+Although this method is slow and prone to overfitting, it is has a high accurary rate. 
+
+We fitted 52 feautures as predictors for the ___classe___ variable. The model final model had acuracy of about 98% which we are very comfortable with. Testing the model on our testing samples, the model was able to predict the classe of the barlifts with an accuracy of $\approx 99\% $ and an out-of-sample error of $\approx 99\% $
+
+#Data Processing
+##Get Data
+```{r getdata, cache=TRUE}
+#download project data set
+if(!file.exists("/data"))
+        {
+            dir.create("/data");
+            download.file("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv", destfile = "/data/pml-training.csv" )
+  download.file("https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv", destfile = "/data/pml-testing.csv" )
+}
+
+#read data sets
+training <- read.csv("/data/pml-training.csv",na.strings=c("NA","#DIV/0!",""))
+
+testing<- read.csv("/data/pml-testing.csv",na.strings=c("NA","#DIV/0!",""))
+
+```
+
+
+##Clean Data
+
+To tidy the data, 
+
+1. We will remove all columns that contains NA and remove features that are not in the testing dataset. The features containing NA are the variance, mean and standard devition (SD) columns. 
+
+2. Since the testing dataset has no time-dependence, these values are useless and can be disregarded. We will also remove the first 7 features since they are related to the time-series or are not numeric.
+
+> see Appendix 4.2, 4.3 for preprocessed and post cleaning data column names
+
+```{r cleandata}
+dim(training);dim(testing)
+
+
+##Note that both dataset are having the same variables (160 variables). Next is try remove the near zero variance variables or columns that contain N/A missing values.
+
+features <- names(testing[,colSums(is.na(testing)) == 0])[8:59]
+
+# Only use features used in testing cases.
+p_training <- training[,c(features,"classe")]
+p_testing <- testing[,c(features,"problem_id")]
+
+dim(p_training); dim(p_testing);
+# see Appendixs for processed data column names
+
+
+```
+#Analysis and Predictipn
+
+##Data Partitioning
+We will partition our data into a training data set (60% of the total cases) and a testing data set (40% of the total cases). This will allow us to estimate the out of sample error of our predictor. 
+```{r,cache=TRUE}
+
+set.seed(123)
+
+inTrain <- createDataPartition(p_training$classe, p=0.6, list=FALSE)
+dp_training <- p_training[inTrain,]
+dp_testing <- p_training[-inTrain,]
+
+dim(dp_training); dim(dp_testing);
+
+```
+
+##Model Fitting
+
+I would be using the random forest prediction model as it is best for __Accuracy__
+
+###Random Forest Model
+
+```{r, cache=TRUE}
+set.seed(123)
+
+tc <- trainControl(method="cv", 5)
+RandomForest <- train(classe ~ ., data=dp_training, method="rf",trControl=tc, ntree=250,importance=TRUE)
+RandomForest
+
+#We would test this models accuracy on our test data(dp_training) to get accuracy rate and estimated out-of-sample error
+
+predict_RandomForest <- predict(RandomForest, dp_testing)
+confusionMatrix(dp_testing$classe, predict_RandomForest)
+
+accuracy <- confusionMatrix(dp_testing$classe, predict_RandomForest)$overall[1]
+error<-1 - as.numeric(confusionMatrix(dp_testing$classe, predict_RandomForest)$overall[1])
+
+```
+The accuracy of the model is `r percent(accuracy)`  and the estimated out-of-sample error is `r percent(error)`
+
+##Predicting Model on the Test Data
+```{r}
+set.seed(123)
+pred <- predict(RandomForest,testing)
+pred
+
+```
+
+
+#Appendix
+
+##Data Source
+
+The training data for this project are available here:
+
+[https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv)
+
+The test data are available here:
+
+[https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv)
+
+The data for this project come from this source: http://groupware.les.inf.puc-rio.br/har.
+
+##Preprocessed Data Details
+```{r cache=TRUE, echo=FALSE}
+colnames(training)
+```
+
+##Processed Data Details
+```{r cache=TRUE, echo=FALSE}
+colnames(p_training)
+```
+
+##Variable Importance Plots
+```{r fig.width=10, fig.height=8 ,cache=TRUE, echo=FALSE}
+imp<-data.frame(RandomForest[["finalModel"]][["importance"]])
+
+mdg<-data.frame(feature= rownames(imp),
+                importance=imp$MeanDecreaseGini)
+
+mdgplot<- ggplot(mdg, aes(y=importance, x=reorder(feature,importance))) + 
+          geom_point(stat='identity',aes(col=importance),  size=3)  +
+          labs(title="Mean Decrease in Impurity", 
+               x="Feature",
+               y="Mean Decrease Gini") +           
+          coord_flip()
+mda<-data.frame(feature= rownames(imp),
+                importance=imp$MeanDecreaseAccuracy)
+
+mdaplot<- ggplot(mda, aes(y=importance, x=reorder(feature,importance))) + 
+          geom_point(stat='identity',aes(col=importance),  size=3)  +
+          labs(title="Mean Decrease in Accuracy", 
+               x="Feature",
+               y="Mean Decrease in Accuracy") +  
+          coord_flip()
+grid.arrange(mdgplot, mdaplot, ncol=2, top="Feature Importance measured by the Fitted Model"  )
+```
+
+##Model correlation matrix 
+A plot of our prediction on our test data:dp_testing
+```{r cache =TRUE,fig.width=10, echo=FALSE}
+ggcorrplot(cor(confusionMatrix(dp_testing$classe, predict_RandomForest)[["table"]],method="s"),
+           lab = TRUE, 
+           lab_size = 5, 
+           lab_col ="yellow",
+            colors = c("skyblue","blue" ,"navyblue"), 
+           title="Randomforest Test Correlation Matrix", 
+           ggtheme=ggplot2::theme_gray())
+
+```
+
